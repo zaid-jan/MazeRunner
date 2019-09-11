@@ -1,0 +1,15 @@
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.cell {
+    padding: 10px;
+}
+#main {
+    display: flex;
+    
+}
+#game {
+    border-style: solid;
+}
