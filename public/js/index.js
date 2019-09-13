@@ -2,8 +2,8 @@ const size = 28;
 let i = 0, j = 0
 let endI = size - 1, endJ = size - 1; 
 let maze = []
-let wallBreak = 3;
-
+let wallBreak = 5;
+let countSteps = 0;
 document.addEventListener("DOMContentLoaded", function() {	
 	maze = createMatrix();
 	let divMatrix = document.getElementById("game")
@@ -18,7 +18,8 @@ document.onkeydown = (e) => {
 	let auxJ = j;
     if (e.keyCode == '38') {
 		// up arrow		
-		if(inBounds(i-1, j)){			
+		if(inBounds(i-1, j)){	
+			countSteps++;		
 			if(isWallBreakMove(i - 1, j)){
 				wallBreakMove(auxI - 1, auxJ);
 			}
@@ -27,6 +28,9 @@ document.onkeydown = (e) => {
 				displayPosition();		
 				resetPositionBackground(auxI, auxJ, "white");
 				updatePosition("red");
+				if(gameWon()){
+					console.log("woohooo")
+				}
 			}			
 		}			
 		else 
@@ -35,7 +39,7 @@ document.onkeydown = (e) => {
     else if (e.keyCode == '40') {
 		// down arrow
 		if(inBounds(i+1, j)){	
-			
+			countSteps++;
 			if(isWallBreakMove(i + 1, j)){
 				wallBreakMove(auxI + 1, auxJ);
 			}
@@ -44,6 +48,9 @@ document.onkeydown = (e) => {
 				displayPosition();				
 				resetPositionBackground(auxI, auxJ, "white");
 				updatePosition("red");
+				if(gameWon()){
+					console.log("woohooo")
+				}
 			}
 		}			
 		else 
@@ -51,7 +58,8 @@ document.onkeydown = (e) => {
     }
     else if (e.keyCode == '37') {
 		// left arrow  
-		if(inBounds(i, j-1)){				
+		if(inBounds(i, j-1)){	
+			countSteps++;			
 			if(isWallBreakMove(i, j-1)){
 				wallBreakMove(auxI, auxJ - 1);
 			}
@@ -60,6 +68,9 @@ document.onkeydown = (e) => {
 				displayPosition();				
 				resetPositionBackground(auxI, auxJ, "white");
 				updatePosition("red");
+				if(gameWon()){
+					console.log("woohooo")
+				}
 			}
 		}			
 		else 
@@ -67,7 +78,8 @@ document.onkeydown = (e) => {
     }
     else if (e.keyCode == '39') {
 		//right arrow		
-		if(inBounds(i, j+1)){						
+		if(inBounds(i, j+1)){	
+			countSteps++;					
 			if(isWallBreakMove(i, j+1)){
 				wallBreakMove(auxI, auxJ + 1);
 			}
@@ -76,6 +88,9 @@ document.onkeydown = (e) => {
 				displayPosition();
 				resetPositionBackground(auxI, auxJ, "white");
 				updatePosition("red");
+				if(gameWon()){
+					console.log("woohooo")
+				}
 			}
 		}			
 		else 
@@ -135,11 +150,11 @@ const isWallBreakMove = (x, y) => {
 
 const wallBreakMove = (auxI, auxJ) => {
 	console.log("i",auxI,"j",auxJ,"wallBreak", wallBreak);
-	document.getElementById("score").innerHTML += `WallBreak ${wallBreak} at ${i}, ${j}<br>`
+	document.getElementById("score").innerHTML += `WallBreak ${wallBreak} at ${auxI}, ${auxJ}<br>`
 	if(wallBreak > 0){		
 		maze[auxI][auxJ] = 0;
 		wallBreak = wallBreak - 1;
-		resetPositionBackground(auxI, auxJ);
+		resetPositionBackground(auxI, auxJ, "white");
 		updatePosition("red");
 	}
 	else {
@@ -194,4 +209,12 @@ const fillWalls = () => {
 
 const displayPosition = () => {
 	document.getElementById("score").innerHTML += `${i},${j}<br>`
+}
+
+const gameWon = () => {
+	if(i === endI && j === endJ){
+		alert("gameWon")
+		return 1;
+	}
+	return 0;
 }
