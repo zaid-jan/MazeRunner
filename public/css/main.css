@@ -13,3 +13,19 @@
 #game {
     border-style: solid;
 }
+
+#score {    
+    padding: 10%;
+    margin-left: 10px;
+}
+
+#inner {
+    background-color: rgb(37, 44, 44);
+    display: flex;
+    padding: 20px;
+}
+
+.unit {
+    margin: 20px;
+    color: white;
+}

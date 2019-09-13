@@ -2,14 +2,20 @@ const size = 28;
 let i = 0, j = 0
 let endI = size - 1, endJ = size - 1; 
 let maze = []
-let wallBreak = 5;
+let wallBreak = 10;
 let countSteps = 0;
+let time = 0;
+
 document.addEventListener("DOMContentLoaded", function() {	
 	maze = createMatrix();
 	let divMatrix = document.getElementById("game")
 	createMaze(maze, divMatrix);
 	randomStart();
-	displayPosition();	
+	displaySteps();
+	displayPowers();
+	setInterval(()=>{
+		displayTime();
+	}, 500)	
 })
 
 document.onkeydown = (e) => {
@@ -19,19 +25,13 @@ document.onkeydown = (e) => {
     if (e.keyCode == '38') {
 		// up arrow		
 		if(inBounds(i-1, j)){	
-			countSteps++;		
 			if(isWallBreakMove(i - 1, j)){
 				wallBreakMove(auxI - 1, auxJ);
+				displayPowers();
 			}
 			else {
 				i -= 1;	
-				displayPosition();		
-				resetPositionBackground(auxI, auxJ, "white");
-				updatePosition("red");
-				if(isGameWon()){
-					gameWon();
-					console.log("woohooo")
-				}
+				common(auxI, auxJ);
 			}			
 		}			
 		else 
@@ -39,20 +39,14 @@ document.onkeydown = (e) => {
     }
     else if (e.keyCode == '40') {
 		// down arrow
-		if(inBounds(i+1, j)){	
-			countSteps++;
+		if(inBounds(i+1, j)){				
 			if(isWallBreakMove(i + 1, j)){
 				wallBreakMove(auxI + 1, auxJ);
+				displayPowers();
 			}
 			else {	
 				i += 1;	
-				displayPosition();				
-				resetPositionBackground(auxI, auxJ, "white");
-				updatePosition("red");
-				if(isGameWon()){
-					gameWon();
-					console.log("woohooo")
-				}
+				common(auxI, auxJ);
 			}
 		}			
 		else 
@@ -60,20 +54,14 @@ document.onkeydown = (e) => {
     }
     else if (e.keyCode == '37') {
 		// left arrow  
-		if(inBounds(i, j-1)){	
-			countSteps++;			
+		if(inBounds(i, j-1)){					
 			if(isWallBreakMove(i, j-1)){
 				wallBreakMove(auxI, auxJ - 1);
+				displayPowers();
 			}
 			else {
 				j -= 1;		
-				displayPosition();				
-				resetPositionBackground(auxI, auxJ, "white");
-				updatePosition("red");
-				if(isGameWon()){
-					gameWon();
-					console.log("woohooo")
-				}
+				common(auxI, auxJ);
 			}
 		}			
 		else 
@@ -81,20 +69,14 @@ document.onkeydown = (e) => {
     }
     else if (e.keyCode == '39') {
 		//right arrow		
-		if(inBounds(i, j+1)){	
-			countSteps++;					
+		if(inBounds(i, j+1)){								
 			if(isWallBreakMove(i, j+1)){
 				wallBreakMove(auxI, auxJ + 1);
+				displayPowers();
 			}
 			else {
 				j += 1;
-				displayPosition();
-				resetPositionBackground(auxI, auxJ, "white");
-				updatePosition("red");
-				if(isGameWon()){
-					gameWon();
-					console.log("woohooo")
-				}
+				common(auxI, auxJ);
 			}
 		}			
 		else 
@@ -154,7 +136,7 @@ const isWallBreakMove = (x, y) => {
 
 const wallBreakMove = (auxI, auxJ) => {
 	console.log("i",auxI,"j",auxJ,"wallBreak", wallBreak);
-	document.getElementById("score").innerHTML += `WallBreak ${wallBreak} at ${auxI}, ${auxJ}<br>`
+	// document.getElementById("score").innerHTML += `WallBreak ${wallBreak} at ${auxI}, ${auxJ}<br>`
 	if(wallBreak > 0){		
 		maze[auxI][auxJ] = 0;
 		wallBreak = wallBreak - 1;
@@ -227,5 +209,30 @@ const gameWon = () => {
 	setTimeout(() => {
 		document.location.reload(true);
 	}, 2000)
+}
 
+const displaySteps = () => {
+	document.getElementById("steps").innerHTML = countSteps;
+	
+}
+
+const displayPowers = () => {
+	document.getElementById("powers").innerHTML = wallBreak;
+}
+
+const common = (auxI, auxJ) => {
+	countSteps++;	
+	displaySteps();		
+	displayPowers();
+	resetPositionBackground(auxI, auxJ, "white");
+	updatePosition("red");
+	if(isGameWon()){
+		gameWon();
+		console.log("woohooo")
+	}
+}
+
+const displayTime = () => {	
+	time += 1;
+	document.getElementById("time").innerHTML = time;
 }
