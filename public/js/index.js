@@ -28,7 +28,8 @@ document.onkeydown = (e) => {
 				displayPosition();		
 				resetPositionBackground(auxI, auxJ, "white");
 				updatePosition("red");
-				if(gameWon()){
+				if(isGameWon()){
+					gameWon();
 					console.log("woohooo")
 				}
 			}			
@@ -48,7 +49,8 @@ document.onkeydown = (e) => {
 				displayPosition();				
 				resetPositionBackground(auxI, auxJ, "white");
 				updatePosition("red");
-				if(gameWon()){
+				if(isGameWon()){
+					gameWon();
 					console.log("woohooo")
 				}
 			}
@@ -68,7 +70,8 @@ document.onkeydown = (e) => {
 				displayPosition();				
 				resetPositionBackground(auxI, auxJ, "white");
 				updatePosition("red");
-				if(gameWon()){
+				if(isGameWon()){
+					gameWon();
 					console.log("woohooo")
 				}
 			}
@@ -88,7 +91,8 @@ document.onkeydown = (e) => {
 				displayPosition();
 				resetPositionBackground(auxI, auxJ, "white");
 				updatePosition("red");
-				if(gameWon()){
+				if(isGameWon()){
+					gameWon();
 					console.log("woohooo")
 				}
 			}
@@ -211,10 +215,17 @@ const displayPosition = () => {
 	document.getElementById("score").innerHTML += `${i},${j}<br>`
 }
 
-const gameWon = () => {
+const isGameWon = () => {
 	if(i === endI && j === endJ){
-		alert("gameWon")
 		return 1;
 	}
 	return 0;
+}
+
+const gameWon = () => {
+	alert("gameWon")
+	setTimeout(() => {
+		document.location.reload(true);
+	}, 2000)
+
 }
