@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	let divMatrix = document.getElementById("game")
 	createMaze(maze, divMatrix);
 	randomStart();
+	displayPosition();	
 })
 
 document.onkeydown = (e) => {
@@ -16,15 +17,16 @@ document.onkeydown = (e) => {
 	let auxI = i;
 	let auxJ = j;
     if (e.keyCode == '38') {
-		// up arrow
-		i -= 1;
-		if(inBounds(i-1, j)){
-			if(isWallBreakMove(auxI - 1, auxJ)){
+		// up arrow		
+		if(inBounds(i-1, j)){			
+			if(isWallBreakMove(i - 1, j)){
 				wallBreakMove(auxI - 1, auxJ);
 			}
-			else {				
+			else {
+				i -= 1;	
+				displayPosition();		
 				resetPositionBackground(auxI, auxJ, "white");
-				updatePosition("yellow");
+				updatePosition("red");
 			}			
 		}			
 		else 
@@ -32,14 +34,16 @@ document.onkeydown = (e) => {
     }
     else if (e.keyCode == '40') {
 		// down arrow
-		if(inBounds(i+1, j)){
-			i += 1;
-			if(isWallBreakMove(auxI + 1, auxJ)){
+		if(inBounds(i+1, j)){	
+			
+			if(isWallBreakMove(i + 1, j)){
 				wallBreakMove(auxI + 1, auxJ);
 			}
-			else {				
+			else {	
+				i += 1;	
+				displayPosition();				
 				resetPositionBackground(auxI, auxJ, "white");
-				updatePosition("yellow");
+				updatePosition("red");
 			}
 		}			
 		else 
@@ -47,14 +51,15 @@ document.onkeydown = (e) => {
     }
     else if (e.keyCode == '37') {
 		// left arrow  
-		if(inBounds(i, j-1)){
-			j -= 1;
-			if(isWallBreakMove(auxI, auxJ - 1)){
+		if(inBounds(i, j-1)){				
+			if(isWallBreakMove(i, j-1)){
 				wallBreakMove(auxI, auxJ - 1);
 			}
-			else {				
+			else {
+				j -= 1;		
+				displayPosition();				
 				resetPositionBackground(auxI, auxJ, "white");
-				updatePosition("yellow");
+				updatePosition("red");
 			}
 		}			
 		else 
@@ -62,14 +67,15 @@ document.onkeydown = (e) => {
     }
     else if (e.keyCode == '39') {
 		//right arrow		
-		if(inBounds(i, j+1)){
-			j += 1;
-			if(isWallBreakMove(auxI, auxJ - 1)){
-				wallBreakMove(auxI, auxJ - 1);
+		if(inBounds(i, j+1)){						
+			if(isWallBreakMove(i, j+1)){
+				wallBreakMove(auxI, auxJ + 1);
 			}
 			else {
+				j += 1;
+				displayPosition();
 				resetPositionBackground(auxI, auxJ, "white");
-				updatePosition("yellow");
+				updatePosition("red");
 			}
 		}			
 		else 
@@ -87,7 +93,7 @@ const randomStart = () => {
 	i = auxI;
 	j = auxJ;	
 	resetPositionBackground(i, j)
-	updatePosition("yellow");
+	updatePosition("red");
 	auxI = size - 1;
 	auxJ = size - 1;
 	while(maze[auxI][auxJ] != 0 && auxI != i && auxJ != j){
@@ -120,20 +126,21 @@ const inBounds = (i, j) => {
 	return true;
 }
 
-const isWallBreakMove = (i, j) => {
-	if(maze[i][j] === 1){
+const isWallBreakMove = (x, y) => {
+	if(maze[x][y] === 1){
 		return 1;
 	}
 	return 0;
 }
 
 const wallBreakMove = (auxI, auxJ) => {
-	if(wallBreak >= 0){
-		document.getElementById("score").innerHTML += `<br>wallBreakMove${wallBreak}`
-		maze[i][j] = 0;
+	console.log("i",auxI,"j",auxJ,"wallBreak", wallBreak);
+	document.getElementById("score").innerHTML += `WallBreak ${wallBreak} at ${i}, ${j}<br>`
+	if(wallBreak > 0){		
+		maze[auxI][auxJ] = 0;
 		wallBreak = wallBreak - 1;
 		resetPositionBackground(auxI, auxJ);
-		updatePosition("yellow");
+		updatePosition("red");
 	}
 	else {
 		alert("ran out of powers")
@@ -183,4 +190,8 @@ const fillWalls = () => {
 			}
 		}
 	}
+}
+
+const displayPosition = () => {
+	document.getElementById("score").innerHTML += `${i},${j}<br>`
 }
