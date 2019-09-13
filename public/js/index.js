@@ -2,6 +2,7 @@ const size = 28;
 let i = 0, j = 0
 let endI = size - 1, endJ = size - 1; 
 let maze = []
+let wallBreak = 3;
 
 document.addEventListener("DOMContentLoaded", function() {	
 	maze = createMatrix();
@@ -16,9 +17,15 @@ document.onkeydown = (e) => {
 	let auxJ = j;
     if (e.keyCode == '38') {
 		// up arrow
+		i -= 1;
 		if(inBounds(i-1, j)){
-			i -= 1;
-			updatePosition(auxI, auxJ);
+			if(isWallBreakMove(auxI - 1, auxJ)){
+				wallBreakMove(auxI - 1, auxJ);
+			}
+			else {				
+				resetPositionBackground(auxI, auxJ, "white");
+				updatePosition("yellow");
+			}			
 		}			
 		else 
 			alert("not cool fam");
@@ -27,7 +34,13 @@ document.onkeydown = (e) => {
 		// down arrow
 		if(inBounds(i+1, j)){
 			i += 1;
-			updatePosition(auxI, auxJ);
+			if(isWallBreakMove(auxI + 1, auxJ)){
+				wallBreakMove(auxI + 1, auxJ);
+			}
+			else {				
+				resetPositionBackground(auxI, auxJ, "white");
+				updatePosition("yellow");
+			}
 		}			
 		else 
 			alert("not cool fam");
@@ -36,16 +49,28 @@ document.onkeydown = (e) => {
 		// left arrow  
 		if(inBounds(i, j-1)){
 			j -= 1;
-			updatePosition(auxI, auxJ);
+			if(isWallBreakMove(auxI, auxJ - 1)){
+				wallBreakMove(auxI, auxJ - 1);
+			}
+			else {				
+				resetPositionBackground(auxI, auxJ, "white");
+				updatePosition("yellow");
+			}
 		}			
 		else 
 			alert("not cool fam");
     }
     else if (e.keyCode == '39') {
-		//right arrow
+		//right arrow		
 		if(inBounds(i, j+1)){
 			j += 1;
-			updatePosition(auxI, auxJ);
+			if(isWallBreakMove(auxI, auxJ - 1)){
+				wallBreakMove(auxI, auxJ - 1);
+			}
+			else {
+				resetPositionBackground(auxI, auxJ, "white");
+				updatePosition("yellow");
+			}
 		}			
 		else 
 			alert("not cool fam");
@@ -61,7 +86,8 @@ const randomStart = () => {
 	}
 	i = auxI;
 	j = auxJ;	
-	updatePosition(i, j);
+	resetPositionBackground(i, j)
+	updatePosition("yellow");
 	auxI = size - 1;
 	auxJ = size - 1;
 	while(maze[auxI][auxJ] != 0 && auxI != i && auxJ != j){
@@ -70,21 +96,50 @@ const randomStart = () => {
 	}
 	endI = auxI;
 	endJ = auxJ;
-	let currPos = document.getElementById(`row${endI}`).childNodes;
-	currPos[endJ].style.backgroundColor = "green";
+	setFinalPosition(endI, endJ, "green");
 }
 
-const updatePosition = (auxI, auxJ) => {
-	let prevPos = document.getElementById(`row${auxI}`).childNodes;
-	prevPos[auxJ].style.backgroundColor = "white";
+const setFinalPosition = (endI, endJ, color) => {
+	let currPos = document.getElementById(`row${endI}`).childNodes;
+	currPos[endJ].style.backgroundColor = color;
+}
+
+const updatePosition = (color) => {
 	let currPos = document.getElementById(`row${i}`).childNodes;
-	currPos[j].style.backgroundColor = "yellow";
+	currPos[j].style.backgroundColor = color;
+}
+
+const resetPositionBackground = (i, j, color) => {
+	let prevPos = document.getElementById(`row${i}`).childNodes;
+	prevPos[j].style.backgroundColor = color;
 }
 
 const inBounds = (i, j) => {
-	if( i < 0 || i >= size || j < 0 || j >= size || maze[i][j] === 1)
+	if( i < 0 || i >= size || j < 0 || j >= size)
 		return false;
 	return true;
+}
+
+const isWallBreakMove = (i, j) => {
+	if(maze[i][j] === 1){
+		return 1;
+	}
+	return 0;
+}
+
+const wallBreakMove = (auxI, auxJ) => {
+	if(wallBreak >= 0){
+		document.getElementById("score").innerHTML += `<br>wallBreakMove${wallBreak}`
+		maze[i][j] = 0;
+		wallBreak = wallBreak - 1;
+		resetPositionBackground(auxI, auxJ);
+		updatePosition("yellow");
+	}
+	else {
+		alert("ran out of powers")
+		//run dfs to end game
+	}
+	
 }
 
 const createMatrix = () => {
