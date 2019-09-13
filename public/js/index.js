@@ -35,7 +35,7 @@ document.onkeydown = (e) => {
 			}			
 		}			
 		else 
-			alert("not cool fam");
+			console.log("not cool fam");
     }
     else if (e.keyCode == '40') {
 		// down arrow
@@ -50,7 +50,7 @@ document.onkeydown = (e) => {
 			}
 		}			
 		else 
-			alert("not cool fam");
+			console.log("not cool fam");
     }
     else if (e.keyCode == '37') {
 		// left arrow  
@@ -65,7 +65,7 @@ document.onkeydown = (e) => {
 			}
 		}			
 		else 
-			alert("not cool fam");
+			console.log("not cool fam");
     }
     else if (e.keyCode == '39') {
 		//right arrow		
@@ -80,7 +80,7 @@ document.onkeydown = (e) => {
 			}
 		}			
 		else 
-			alert("not cool fam");
+			console.log("not cool fam");
     }
 }
 
@@ -122,8 +122,11 @@ const resetPositionBackground = (i, j, color) => {
 }
 
 const inBounds = (i, j) => {
-	if( i < 0 || i >= size || j < 0 || j >= size)
+	if( i < 0 || i >= size || j < 0 || j >= size){
+		document.getElementById("rules").innerHTML = "Out Of Bounds"
 		return false;
+	}
+	document.getElementById("rules").innerHTML = "Go On"	
 	return true;
 }
 
@@ -136,6 +139,7 @@ const isWallBreakMove = (x, y) => {
 
 const wallBreakMove = (auxI, auxJ) => {
 	console.log("i",auxI,"j",auxJ,"wallBreak", wallBreak);
+	document.getElementById("rules").innerHTML = "Wall Broken"
 	// document.getElementById("score").innerHTML += `WallBreak ${wallBreak} at ${auxI}, ${auxJ}<br>`
 	if(wallBreak > 0){		
 		maze[auxI][auxJ] = 0;
@@ -144,7 +148,7 @@ const wallBreakMove = (auxI, auxJ) => {
 		updatePosition("red");
 	}
 	else {
-		alert("ran out of powers")
+		console.log("ran out of powers")
 		//run dfs to end game
 	}
 	
@@ -205,7 +209,7 @@ const isGameWon = () => {
 }
 
 const gameWon = () => {
-	alert("gameWon")
+	document.getElementById("status").innerHTML = "Game Won";
 	setTimeout(() => {
 		document.location.reload(true);
 	}, 2000)

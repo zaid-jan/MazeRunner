@@ -7,25 +7,39 @@
     padding: 10px;
 }
 #main {
-    display: flex;
-    
+    display: flex;    
 }
 #game {
     border-style: solid;
 }
 
-#score {    
-    padding: 10%;
+#score {   
+    width: auto; 
+    padding: 50px;
     margin-left: 10px;
 }
 
 #inner {
     background-color: rgb(37, 44, 44);
     display: flex;
-    padding: 20px;
+    padding: 5px;
+    width: auto;
 }
 
 .unit {
     margin: 20px;
     color: white;
+    font-family: 'Courier New', Courier, monospace
+}
+#title {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace
+}
+#status {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace
+}
+#rules {
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace
 }
